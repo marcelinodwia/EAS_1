@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Harga Rumah</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediksi Harga Rumah</h1>
+        <form id="pricePredictionForm" action="/predict" method="post">
+            <div class="form-group">
+                <label for="landSize">Luas Tanah (m²):</label>
+                <input type="number" id="landSize" name="landSize" required>
+            </div>
+            <div class="form-group">
+                <label for="bedrooms">Jumlah Kamar:</label>
+                <input type="number" id="bedrooms" name="bedrooms" required>
+            </div>
+            <div class="form-group">
+                <label for="buildingAge">Usia Bangunan (tahun):</label>
+                <input type="number" id="buildingAge" name="buildingAge" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Lokasi (1=urban, 2=suburban):</label>
+                <input type="number" id="location" name="location" required>
+            </div>
+            <button type="submit">Prediksi Harga</button>
+        </form>
+        <div id="predictionResult"></div>
+    </div>
+    <script>
+        $('#pricePredictionForm').on('submit', function(e) {
+            e.preventDefault();  // Prevent form from submitting normally
+            $.ajax({
+                url: '/predict',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#predictionResult').html('Prediksi Harga: ' + response.prediksi_harga.toFixed(2));
+                },
+                error: function() {
+                    $('#predictionResult').html('Error processing your request');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
